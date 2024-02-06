@@ -1,0 +1,11 @@
+<launch>
+
+  
+
+
+<node name="foo" pkg="modbus" type="modbus_client1.py" respawn="true" />
+
+
+
+ 
+</launch>

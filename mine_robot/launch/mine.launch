@@ -1,0 +1,55 @@
+<launch>
+
+  
+
+   <include file="$(find realsense2_camera)/launch/demo_pointcloud.launch" > 
+	</include>
+
+   <include file="$(find depthimage_to_laserscan)/launch/launchfile_sample.launch" > 
+	</include>
+	
+    <include file="$(find slamware_ros_sdk)/launch/slamware_ros_sdk_server_node.launch" >
+
+        <arg name="move_base_goal_topic" value="disable"/>
+        <arg name="ip_address" value="192.168.11.4" />
+    </include>
+
+ <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+  <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
+  <param name="serial_baudrate"     type="int"    value="115200"/>
+  <param name="frame_id"            type="string" value="laser0022"/>
+  <param name="inverted"            type="bool"   value="false"/>
+  <param name="angle_compensate"    type="bool"   value="true"/>
+  </node>
+
+   <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch" > 
+	</include>
+
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+
+
+        <rosparam file="$(find slamware_ros_sdk)/cfg/diff_drive/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find slamware_ros_sdk)/cfg/diff_drive/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find slamware_ros_sdk)/cfg/diff_drive/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find slamware_ros_sdk)/cfg/diff_drive/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find slamware_ros_sdk)/cfg/diff_drive/base_global_planner_param.yaml" command="load" />
+        <rosparam file="$(find slamware_ros_sdk)/cfg/diff_drive/teb_local_planner_params.yaml" command="load" /> 
+        <rosparam file="$(find slamware_ros_sdk)/cfg/diff_drive/move_base_params.yaml" command="load" />
+     
+
+       
+        <param name="planner_frequency" value="1.0" />
+        <param name="planner_patience" value="5.0" /> -->
+
+
+    </node>
+
+
+  <node name="base2_footprint" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 1 /base_link /base_footprint 100"/>
+  <node name="base2_camera" pkg="tf" type="static_transform_publisher" args="0 -0.28 0 0 0 0 1 /base_link /camera_link 100"/>
+  <node name="base2_laser2" pkg="tf" type="static_transform_publisher" args="-0.55 -0.53 0 0 0 0.7071068 0.7071068 /base_link /laser0022 100"/>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find slamware_ros_sdk)/rviz/slamware_ros_sdk_teb.rviz" />
+</launch>

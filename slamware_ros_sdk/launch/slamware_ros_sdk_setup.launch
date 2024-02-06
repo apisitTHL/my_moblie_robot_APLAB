@@ -1,0 +1,10 @@
+<launch>
+
+    <!-- <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/> -->
+    <node pkg="riotu_robot_pose_publisher" type="riotu_robot_pose_publisher" name="robot_pose" />
+    <!-- <node pkg="arduino_serial" type="arduino_serial.py" name="serial_connect_arduino" output="screen"/> -->
+    <node pkg="beginner_tutorials" type="listener.py" name="set_get_map" />
+    <node pkg="beginner_tutorials" type="set_pose.py" name="set_pose" />
+
+</launch>
+
