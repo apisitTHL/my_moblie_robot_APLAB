@@ -1,0 +1,5 @@
+sudo apt-get install ros-$ROS_DISTRO-realsense2-camera
+sudo apt-get install ros-melodic-teb-local-planner
+
+sudo apt-get install python-pymodbus
+sudo apt-get install python-pyasn1 python-twisted-conch
